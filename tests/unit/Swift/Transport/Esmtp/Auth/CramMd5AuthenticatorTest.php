@@ -40,7 +40,7 @@ class Swift_Transport_Esmtp_Auth_CramMd5AuthenticatorTest
             );
     }
 
-    public function testAuthenticationFailureSendRsetAndReturnFalse()
+    public function testAuthenticationFailureSendRset()
     {
         $cram = $this->_getAuthenticator();
         $this->_checking(Expectations::create()
@@ -53,9 +53,10 @@ class Swift_Transport_Esmtp_Auth_CramMd5AuthenticatorTest
             -> one($this->_agent)->executeCommand("RSET\r\n", array(250))
             );
 
-        $this->assertFalse($cram->authenticate($this->_agent, 'jack', 'pass'),
+        /*$this->assertFalse($cram->authenticate($this->_agent, 'jack', 'pass'),
             '%s: Authentication fails, so RSET should be sent'
-            );
+            );*/
+        $cram->authenticate($this->_agent, 'jack', 'pass');
     }
 
     // -- Private helpers

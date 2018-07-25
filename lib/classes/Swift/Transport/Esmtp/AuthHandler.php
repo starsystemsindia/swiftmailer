@@ -176,15 +176,31 @@ class Swift_Transport_Esmtp_AuthHandler implements Swift_Transport_EsmtpHandler
                     array_map('strtolower', $this->_esmtpParams)))
                 {
                     $count++;
-                    if ($authenticator->authenticate($agent, $this->_username, $this->_password)) {
-                        return;
+                    try {
+                        $authCheck = $authenticator->authenticate($agent, $this->_username, $this->_password);
+                        if ($authCheck === true) {
+                            return;
+                        } else {
+                            //$errors[] = [$authenticator->getAuthKeyword(), $authCheck];
+                            throw new Swift_TransportException($authCheck);
+                        }
+                    } catch(Swift_TransportException $e) {
+                        //$errors[] = [$authenticator->getAuthKeyword(), $e];
+                        throw new Swift_TransportException($e->getMessage());
                     }
                 }
             }
-            throw new Swift_TransportException(
+            /*throw new Swift_TransportException(
                 'Failed to authenticate on SMTP server with username "' .
                 $this->_username . '" using ' . $count . ' possible authenticators'
-                );
+                );*/
+
+            /*$message = 'Failed to authenticate on SMTP server with username "'.$this->_username.'" using '.$count.' possible authenticators.';
+
+            foreach ($errors as $error) {
+                    $message .= ' Authenticator '.$error[0].' returned '.$error[1].'.';
+                }
+            throw new Swift_TransportException($message);*/
         }
     }
 

@@ -50,7 +50,7 @@ class Swift_Transport_Esmtp_Auth_CramMd5Authenticator implements Swift_Transport
         } catch (Swift_TransportException $e) {
             $agent->executeCommand("RSET\r\n", array(250));
 
-            return false;
+            throw new Swift_TransportException($e->getMessage());
         }
     }
 

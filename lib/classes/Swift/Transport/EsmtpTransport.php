@@ -283,7 +283,8 @@ class Swift_Transport_EsmtpTransport extends Swift_Transport_AbstractSmtpTranspo
                 sprintf("EHLO %s\r\n", $this->_domain), array(250)
                 );
         } catch (Swift_TransportException $e) {
-            return parent::_doHeloCommand();
+            $this->_throwException($e);
+            //return parent::_doHeloCommand();
         }
 
         if ($this->_params['tls']) {
